@@ -1,0 +1,39 @@
+﻿@page "/chat/{ChatId}"
+@rendermode InteractiveServer
+@using Microsoft.AspNetCore.SignalR.Client
+@using WebChat.Model
+@inject NavigationManager Navigation
+@inject ChatDataService chatService
+@inject UserDataService userService
+@implements IAsyncDisposable
+
+<PageTitle>Chat</PageTitle>
+
+<div class="container">
+    <div class="message-container">
+        @foreach (var message in messages)
+        {
+            <div class="message @(message?.User?.Id == userService.CurrentUser?.Id ? "right" : "left")">
+                @message?.Text
+            </div>
+        }
+    </div>
+
+    <div class="bottom-bar">
+        <div class="drop-down">
+            <select class="form-control">
+                <option value="">Select a user</option>
+                @foreach (var user in userList)
+                {
+                    <option value="@user.Id">@user.Name</option>
+                }
+            </select>
+        </div>
+        <div class="form-group message-input">
+            <input id="messageInput" class="form-control" @bind="messageInput" />
+        </div>
+        <div class="form-group send-button">
+            <button class="btn btn-primary" @onclick="Send" disabled="@(!IsConnected)">Send</button>
+        </div>
+    </div>
+</div>

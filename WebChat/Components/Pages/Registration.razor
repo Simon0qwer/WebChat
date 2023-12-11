@@ -1,0 +1,54 @@
+﻿@page "/"
+@page "/registration"
+@rendermode InteractiveServer
+@using Microsoft.AspNetCore.SignalR.Client
+@using WebChat.Model
+@inject NavigationManager Navigation
+@inject ChatDataService chatService
+@inject UserDataService userService
+
+<PageTitle>Registration</PageTitle>
+
+@if (showMenu)
+{
+    @if (showLogin)
+    {
+        <div class="registration-container">
+            <h2>Login @registrationName</h2>
+            <input class="form-control registration-input" @bind="registrationName" placeholder="Enter your name" />
+            <button class="btn btn-primary" @onclick="() => { Login(); }">Login</button>
+            @if (showError)
+            {
+                <p class="error-message">This name doesn't exist. Please try again with a different name.</p>
+            }
+        </div>
+    }
+    else if (showRegistration)
+    {
+        <div class="registration-container">
+            <h2>Registration</h2>
+            <input class="form-control registration-input" @bind="registrationName" placeholder="Enter your name" />
+            <button class="btn btn-primary" @onclick="() => { Register(); }">Create</button>
+            @if (showError)
+            {
+                <p class="error-message">This name already exists. Please try again with a different name.</p>
+            }
+        </div>
+    }
+    
+    else
+    {
+        <div class="menu">
+            <h2>Welcome to WebChat!</h2>
+            <button class="btn btn-primary login-btn" @onclick="() => { showLogin = true; showRegistration = false; }">Login</button>
+            <button class="btn btn-primary new-account-btn" @onclick="() => { showRegistration = true; showLogin = false; }">Create Account</button>
+        </div>
+    }
+}
+
+
+
+
+
+
+
