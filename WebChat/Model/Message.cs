@@ -2,7 +2,7 @@
 
 public class Message
 {
-    public Guid Id { get; set; }
+    public Guid Id { get; set; } = Guid.NewGuid();
     public string Text { get; set; }
     public DateTime Timestamp { get; set; }
 

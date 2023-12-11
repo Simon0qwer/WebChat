@@ -17,8 +17,4 @@ public class MessageDataService
         return context.Messages.SingleOrDefault(u => u.Id == message.Id);
     }
 
-    public List<Message> GetMessages()
-    {
-        return context.Messages.ToList();
-    }
 }

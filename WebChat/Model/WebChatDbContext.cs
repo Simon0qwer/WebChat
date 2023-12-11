@@ -25,7 +25,7 @@ public class WebChatDbContext : DbContext
             .HasKey(chat => chat.Id);
 
         modelBuilder.Entity<Message>()
-            .HasKey(chat => chat.Id);
+            .HasKey(message => message.Id);
 
         modelBuilder.Entity<User>()
             .HasIndex(user => user.Name)

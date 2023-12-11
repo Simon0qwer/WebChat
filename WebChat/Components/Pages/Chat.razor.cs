@@ -23,21 +23,21 @@ partial class Chat
     private Guid _chatId { get; set; }
 
     protected override async Task OnInitializedAsync()
-    {
-        _currentChat = chatService.CurrentChat;
-        if (_currentChat is not null)
-        {
-            messages = chatService.GetMessagesInChat(_currentChat.Id);
-        }
-
-
+    { 
         hubConnection = new HubConnectionBuilder()
             .WithUrl(Navigation.ToAbsoluteUri("/chathub"))
             .Build();
 
-        hubConnection.On<string, string>("ReceiveMessage", (userId, message) =>
+        hubConnection.On<string, string>("ReceiveMessage", async (userId, message) =>
         {
             userService.GetUsers();
+
+            _currentChat = chatService.CurrentChat;
+            if (_currentChat is not null)
+            {
+                messages = chatService.GetMessagesInChat(_currentChat.Id);
+            }
+
             var user = userList.FirstOrDefault(u => u.Id == Guid.Parse(userId));
             if (user == null)
             {
@@ -50,8 +50,10 @@ partial class Chat
             }
             var encodedMsg = $"{user.Name}: {message}";
 
-            var newMessage = new Message { User = user, Text = encodedMsg };
+            var newMessage = new Message { User = user, Text = encodedMsg, ChatId = _currentChat.Id };
             messages.Add(newMessage);
+            messageService.SaveMessage(newMessage);
+
             InvokeAsync(StateHasChanged);
         });
 
