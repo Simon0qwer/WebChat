@@ -60,6 +60,20 @@
     {
         <div class="chat-card">
             <p>@chat.Name</p>
+
+            @* <select @bind="userInChatId" class="user-dropdown">
+                    <option value="">Select User</option>
+                    @foreach (var user in userList)
+                    {
+                        <option value="@user.Id">@user.Name</option>
+                    }
+            </select>
+
+            <!-- Button to add the selected user to the chat -->
+            <button class="btn btn-primary" @onclick="AddUserToChat">
+            <span class="icon">&#43;</span> Add User
+            </button> *@
+
             <NavLink class="nav-link" href="@($"chat/{@chat.Id}")" Match="NavLinkMatch.All">
                 <span class="bi bi-chat-text-left-fill" aria-hidden="true"></span>Go to Chat
             </NavLink>

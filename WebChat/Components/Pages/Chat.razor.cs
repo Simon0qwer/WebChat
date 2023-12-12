@@ -66,10 +66,8 @@ partial class Chat
             //    messages = chatService.GetMessagesInChat(_currentChat.Id);
             //}
 
-
-
-            //var encodedMsg = $"{user.Name}: {message}";
-
+            var encodedMsg = $"{user.Name}: {messageInput}";
+            message.Text = encodedMsg;
             messages.Add(message);
 
             //var newMessage = new Message { User = user, Text = encodedMsg, Chat = chat};
