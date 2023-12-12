@@ -15,8 +15,12 @@
     {
         <div class="registration-container">
             <h2>Login @registrationName</h2>
+
             <input class="form-control registration-input" @bind="registrationName" placeholder="Enter your name" />
-            <button class="btn btn-primary" @onclick="() => { Login(); }">Login</button>
+
+            <button class="btn btn-primary login-btn" @onclick="() => { Login(); }">Login</button>
+            <button class="btn btn-primary new-account-btn" @onclick="() => { showLogin = false; }">Return</button>
+            
             @if (showError)
             {
                 <p class="error-message">This name doesn't exist. Please try again with a different name.</p>
@@ -27,8 +31,12 @@
     {
         <div class="registration-container">
             <h2>Registration</h2>
+
             <input class="form-control registration-input" @bind="registrationName" placeholder="Enter your name" />
-            <button class="btn btn-primary" @onclick="() => { Register(); }">Create</button>
+
+            <button class="btn btn-primary login-btn" @onclick="() => { Register(); }">Create</button>
+            <button class="btn btn-primary new-account-btn" @onclick="() => { showRegistration = false; } ">Return</button>
+
             @if (showError)
             {
                 <p class="error-message">This name already exists. Please try again with a different name.</p>
@@ -39,7 +47,7 @@
     else
     {
         <div class="menu">
-            <h2>Welcome to WebChat!</h2>
+            <h2>Welcome to WebChat!</h2>      
             <button class="btn btn-primary login-btn" @onclick="() => { showLogin = true; showRegistration = false; }">Login</button>
             <button class="btn btn-primary new-account-btn" @onclick="() => { showRegistration = true; showLogin = false; }">Create Account</button>
         </div>
