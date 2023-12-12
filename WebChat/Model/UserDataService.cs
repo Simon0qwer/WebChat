@@ -1,9 +1,11 @@
 ﻿
+using Microsoft.EntityFrameworkCore;
+
 namespace WebChat.Model;
 
 public class UserDataService
 {
-    public readonly WebChatDbContext context = new();
+    public WebChatDbContext context = new();
 
 
     private User? _currentUser;
@@ -22,7 +24,7 @@ public class UserDataService
 
     public List<User> GetUsers()
     {
-        return context.Users.ToList();
+        return context.Users.AsNoTracking().ToList();
     }
 
     public User? SaveUser(User user)
@@ -32,4 +34,8 @@ public class UserDataService
         return context.Users.SingleOrDefault(u => u.Id == user.Id);
     }
 
+    public void ContextReload()
+    {
+        context = new WebChatDbContext();
+    }
 }

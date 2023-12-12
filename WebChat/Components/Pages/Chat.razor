@@ -9,12 +9,11 @@
 @implements IAsyncDisposable
 
 <PageTitle>Chat</PageTitle>
-
 <div class="container">
     <div class="message-container">
-        @foreach (var message in messages)
+        @foreach (var message in messages.OrderBy(m => m.Timestamp))
         {
-            <div class="message @(message?.User?.Id == userService.CurrentUser?.Id ? "right" : "left")">
+            <div class="message @(message?.UserId == selectedUserId ? "right" : "left")">
                 @message?.Text
             </div>
         }

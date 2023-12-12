@@ -3,10 +3,16 @@ using WebChat.Model;
 
 namespace WebChat.Hubs;
 
-public class ChatHub : Hub
+public class ChatHub(MessageDataService messageService) : Hub
 {
-    public async Task SendMessage(User user, string message)
+    private readonly MessageDataService messageService = messageService;
+
+    public async Task SendMessage(Message message)
     {
-        await Clients.All.SendAsync("ReceiveMessage", user.Id, message);
+        message = messageService.SaveMessage(message);
+        message.User = null;
+        message.Chat = null;
+        await Clients.All.SendAsync("ReceiveMessage", message);
+
     }
 }

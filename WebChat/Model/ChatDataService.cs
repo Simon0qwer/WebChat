@@ -5,7 +5,7 @@ namespace WebChat.Model;
 
 public class ChatDataService
 {
-    private readonly WebChatDbContext context = new();
+    private WebChatDbContext context = new();
 
     private Chat? _currentChat;
     public Chat? CurrentChat => _currentChat;
@@ -23,7 +23,7 @@ public class ChatDataService
     public List<Chat> GetUserChats(Guid userId)
     {
         var chats = context.Chats
-            .Include(c => c.Users).ToList();
+            .Include(c => c.Users).AsNoTracking().ToList();
 
         var userChats = chats.Where(c => c.Users
                 .Any(u => u.Id == userId)).ToList();
@@ -34,7 +34,7 @@ public class ChatDataService
     public List<User> GetUsersInChat(Guid chatId)
     {
         return context.Chats
-            .Include(c => c.Users)
+            .Include(c => c.Users).AsNoTracking()
             .FirstOrDefault(c => c.Id == chatId)?
             .Users.ToList() ?? new List<User>();
     }
@@ -42,19 +42,29 @@ public class ChatDataService
     public List<Message> GetMessagesInChat(Guid chatId)
     {
         return context.Chats
-            .Include(c => c.Messages)
+            .Include(c => c.Messages).AsNoTracking()
             .FirstOrDefault(c => c.Id == chatId)?
             .Messages.ToList() ?? new List<Message>();
     }
 
+    public List<Chat> GetChats()
+    {
+        return context.Chats.AsNoTracking().ToList();
+    }
+
     public void CreateChat(Chat chat)
     {
-        context.Chats.Add(chat);
         foreach(var user in chat.Users)
         {
             context.Entry(user).State = EntityState.Unchanged;
         }
+        context.Chats.Add(chat);
         context.SaveChanges();
+    }
+
+    public void ContextReload()
+    {
+        context = new WebChatDbContext();
     }
 
 }

@@ -39,9 +39,15 @@ partial class ChatList
 
         chatService.CreateChat(newChat);
 
-        userChats.Add(newChat);
+        if (_currentUser is not null)
+        {
+            userChats = chatService.GetUserChats(_currentUser.Id);
+        }
 
         newChatName = string.Empty;
+
+        //var existingUser = userService.GetUsers().First(user => user.Name == registrationName);
+        //userService.SetCurrentUser(existingUser);
     }
 
     private void AddUserToChat()

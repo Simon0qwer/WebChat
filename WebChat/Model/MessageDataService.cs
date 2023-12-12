@@ -1,8 +1,11 @@
-﻿namespace WebChat.Model;
+﻿using Microsoft.EntityFrameworkCore;
+using WebChat.Components.Pages;
+
+namespace WebChat.Model;
 
 public class MessageDataService
 {
-    private readonly WebChatDbContext context = new();
+    private WebChatDbContext context = new();
 
     public MessageDataService()
     {
@@ -10,11 +13,22 @@ public class MessageDataService
         context.Database.EnsureCreated();
     }
 
-    public Message? SaveMessage(Message message)
+    public Message SaveMessage(Message message)
     {
+        context.Entry(message.User).State = EntityState.Unchanged;
+        context.Entry(message.Chat).State = EntityState.Unchanged;
         context.Messages.Add(message);
         context.SaveChanges();
-        return context.Messages.SingleOrDefault(u => u.Id == message.Id);
+        return context.Messages.Single(u => u.Id == message.Id);
     }
 
+    public void ContextReload()
+    {
+        context = new WebChatDbContext();
+    }
+
+    public List<Message> GetMessagesForChat(Guid chatId)
+    {
+        return context.Messages.Where(m => m.ChatId == chatId).AsNoTracking().ToList();
+    }
 }
