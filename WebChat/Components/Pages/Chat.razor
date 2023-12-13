@@ -9,12 +9,28 @@
 @implements IAsyncDisposable
 
 <PageTitle>Chat</PageTitle>
+@selectedUserId
+
 <div class="container">
     <div class="message-container">
         @foreach (var message in messages.OrderBy(m => m.Timestamp))
         {
             <div class="message @(message?.UserId == selectedUserId ? "right" : "left")">
+                @if (message?.UserId == selectedUserId)
+                {
+                    <span class="user-name">You:</span>
+                }
+                else if (message?.User != null)
+                {
+                    <span class="user-name">@message?.User.Name:</span>
+                }
+                else
+                {
+                    <span class="user-name">Unknown User:</span>
+                } 
+                @* <span class="user-name">@message?.User.Name:</span> *@
                 @message?.Text
+
             </div>
         }
     </div>

@@ -22,13 +22,8 @@ public class MessageDataService
         return context.Messages.Single(u => u.Id == message.Id);
     }
 
-    public void ContextReload()
-    {
-        context = new WebChatDbContext();
-    }
-
     public List<Message> GetMessagesForChat(Guid chatId)
     {
-        return context.Messages.Where(m => m.ChatId == chatId).AsNoTracking().ToList();
+        return context.Messages.Include(m => m.User).Where(m => m.ChatId == chatId).AsNoTracking().ToList();
     }
 }

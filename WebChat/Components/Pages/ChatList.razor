@@ -9,23 +9,20 @@
 <PageTitle>Chats</PageTitle>
 
 <div class="chats-container">
-    <h3>Your Chats</h3>
+    <h5>Your Chats</h5>
 
-    <!-- Section to create a new chat -->
     <div class="create-chat-container">
         <div class="button-container">
-            <h4>Create a New Chat</h4>
+            <h6>Create a New Chat</h6>
             <button class="btn btn-primary" @onclick="ToggleNewChatBox">
                 <span class="icon">&#43;</span> New Chat
             </button>
         </div>
 
-        <!-- New chat box -->
         <div class="new-chat-box" style="@(showNewChatBox ? "display: block;" : "display: none;")">
             <div class="user-input-container">
                 <input class="user-input" @bind="newChatName" placeholder="Enter chat name" />
 
-                <!-- Dropdown for selecting users -->
                 <select @bind="userInChatId" class="user-dropdown">
                     <option value="">Select User</option>
                     @foreach (var user in userList)
@@ -34,13 +31,11 @@
                     }
                 </select>
 
-                <!-- Button to add the selected user to the chat -->
                 <button class="btn btn-primary" @onclick="AddUserToChat">
                     <span class="icon">&#43;</span> Add User
                 </button>
             </div>
 
-            <!-- List of users added to the chat -->
             <div class="user-list">
                 @foreach (var user in usersInNewChat)
                 {
@@ -48,36 +43,20 @@
                 }
             </div>
 
-            <!-- Button to create the chat -->
             <button class="btn btn-primary" @onclick="CreateNewChat">
                 <span class="icon">&#43;</span> Create Chat
             </button>
         </div>
     </div>
 
-    <!-- Display existing chats -->
     @foreach (var chat in userChats)
     {
         <div class="chat-card">
             <p>@chat.Name</p>
 
-            @* <select @bind="userInChatId" class="user-dropdown">
-                    <option value="">Select User</option>
-                    @foreach (var user in userList)
-                    {
-                        <option value="@user.Id">@user.Name</option>
-                    }
-            </select>
-
-            <!-- Button to add the selected user to the chat -->
-            <button class="btn btn-primary" @onclick="AddUserToChat">
-            <span class="icon">&#43;</span> Add User
-            </button> *@
-
             <NavLink class="nav-link" href="@($"chat/{@chat.Id}")" Match="NavLinkMatch.All">
                 <span class="bi bi-chat-text-left-fill" aria-hidden="true"></span>Go to Chat
             </NavLink>
-            @* <button class="btn btn-primary" @onclick="() => NavigateToChat(chat.Id)">Go to Chat</button> *@
         </div>
     }
 </div>

@@ -15,7 +15,6 @@ partial class Chat
     private List<User> userList = new List<User>();
     private List<Model.Chat> chatList = new List<Model.Chat>();
     private Guid selectedUserId => userService.CurrentUser?.Id ?? Guid.Empty;
-    //private User? currentUser => userList.FirstOrDefault(u => u.Id == selectedUserId);
     private User? currentUser => userService.CurrentUser;
 
     private Model.Chat _chat;
@@ -60,17 +59,7 @@ partial class Chat
                 message.Chat = chat;
             }
 
-            //_currentChat = chatService.CurrentChat;
-            //if (_currentChat is not null)
-            //{
-            //    messages = chatService.GetMessagesInChat(_currentChat.Id);
-            //}
-
-            var encodedMsg = $"{user.Name}: {messageInput}";
-            message.Text = encodedMsg;
             messages.Add(message);
-
-            //var newMessage = new Message { User = user, Text = encodedMsg, Chat = chat};
            
             await InvokeAsync(StateHasChanged);
         });
@@ -82,7 +71,7 @@ partial class Chat
         _chat = chatList.Single(c => c.Id == _chatId);
 
         messages = messageService.GetMessagesForChat(_chatId);
-
+    
         await hubConnection.StartAsync();
     }
     private async Task Send()
