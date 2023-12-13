@@ -13,8 +13,10 @@ partial class ChatList
     private List<User> userList = new List<User>();
 
     private string newChatName = string.Empty;
+    private Guid selectedChatIdForSettings = Guid.Empty;
     private Guid userInChatId;
     private bool showNewChatBox = false;
+    private bool showChatSettings = false;
 
     private User? _currentUser;
 
@@ -45,12 +47,9 @@ partial class ChatList
         }
 
         newChatName = string.Empty;
-
-        //var existingUser = userService.GetUsers().First(user => user.Name == registrationName);
-        //userService.SetCurrentUser(existingUser);
     }
 
-    private void AddUserToChat()
+    private void AddUserToChat(Guid chatId)
     {
         if (userInChatId != Guid.Empty && !usersInNewChat.Any(u => u.Id == userInChatId))
         {
@@ -61,6 +60,19 @@ partial class ChatList
             }
         }
     }
+
+    private void AddUserToNewChat()
+    {
+        if (userInChatId != Guid.Empty && !usersInNewChat.Any(u => u.Id == userInChatId))
+        {
+            var selectedUser = userList.FirstOrDefault(u => u.Id == userInChatId);
+            if (selectedUser != null)
+            {
+                usersInNewChat.Add(selectedUser);
+            }
+        }
+    }
+
     private void ToggleNewChatBox()
     {
         showNewChatBox = !showNewChatBox;
@@ -72,6 +84,12 @@ partial class ChatList
             usersInNewChat.Clear();
             userInChatId = Guid.Empty;
         }
+    }
+
+    private void ToggleChatSettings(Guid chatId)
+    {
+        showChatSettings = !showChatSettings;
+        selectedChatIdForSettings = chatId;
     }
 
 

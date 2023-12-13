@@ -31,7 +31,7 @@
                     }
                 </select>
 
-                <button class="btn btn-primary" @onclick="AddUserToChat">
+                <button class="btn btn-primary" @onclick="AddUserToNewChat">
                     <span class="icon">&#43;</span> Add User
                 </button>
             </div>
@@ -52,11 +52,44 @@
     @foreach (var chat in userChats)
     {
         <div class="chat-card">
-            <p>@chat.Name</p>
+            <div class="chat-header">
+                <p>@chat.Name</p>
+                <NavLink class="nav-link" href="@($"chat/{@chat.Id}")" Match="NavLinkMatch.All">
+                    <span class="bi bi-chat-text-left-fill" aria-hidden="true"></span> Go to Chat
+                </NavLink>
+                <button class="btn btn-settings" @onclick="() => ToggleChatSettings(chat.Id)">
+                    <span class="bi bi-gear-fill" aria-hidden="true"></span> Settings
+                </button>
+            </div>
 
-            <NavLink class="nav-link" href="@($"chat/{@chat.Id}")" Match="NavLinkMatch.All">
-                <span class="bi bi-chat-text-left-fill" aria-hidden="true"></span>Go to Chat
-            </NavLink>
+            <!-- Settings section for each chat card -->
+            <div class="chat-settings" style="@(showChatSettings && selectedChatIdForSettings == chat.Id ? "display: block;" : "display: none;")">
+                <!-- List of old users in a row -->
+                <div class="user-list">
+                    @foreach (var user in chat.Users)
+                    {
+                        <div>@user.Name</div>
+                    }
+                </div>
+
+                <div class="drop-down">
+                    <select class="form-control">
+                        <option value="">Select a user</option>
+                        @foreach (var user in userList)
+                        {
+                            <option value="@user.Id">@user.Name</option>
+                        }
+                    </select>
+                </div>
+
+                <button class="btn btn-primary" @onclick="() => AddUserToChat(chat.Id)">
+                    <span class="bi bi-person-plus-fill" aria-hidden="true"></span> Add User
+                </button>
+
+                <button class="btn btn-danger" @onclick="() => chatService.DeleteChat(chat.Id, userChats)">
+                    <span class="bi bi-trash-fill" aria-hidden="true"></span> Delete Chat
+                </button>
+            </div>
         </div>
     }
 </div>

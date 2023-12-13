@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc.Diagnostics;
 using Microsoft.EntityFrameworkCore;
+using WebChat.Components.Pages;
 
 namespace WebChat.Model;
 
@@ -62,9 +63,19 @@ public class ChatDataService
         context.SaveChanges();
     }
 
-    public void ContextReload()
+    public void DeleteChat(Guid chatId, List<Chat> userChats)
     {
-        context = new WebChatDbContext();
-    }
+        var chatToDelete = context.Chats
+        .Include(c => c.Messages) 
+        .FirstOrDefault(c => c.Id == chatId);
 
+        if (chatToDelete != null)
+        {
+            context.Messages.RemoveRange(chatToDelete.Messages);
+            context.Chats.Remove(chatToDelete);
+            context.SaveChanges();
+        }
+        userChats.Remove(userChats.First(c => c.Id == chatId));
+    }
+    
 }
