@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Components;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using System;
 using System.Text;
 using WebChat.Model;
 
@@ -11,6 +12,9 @@ partial class ChatList
     private List<Model.Chat> userChats = new List<Model.Chat>();
     private List<User> usersInNewChat = new List<User>();
     private List<User> userList = new List<User>();
+
+    private Guid selectedUserForNewChat = Guid.Empty;
+    private Guid selectedUserId = Guid.Empty;
 
     private string newChatName = string.Empty;
     private Guid selectedChatIdForSettings = Guid.Empty;
@@ -48,12 +52,11 @@ partial class ChatList
 
         newChatName = string.Empty;
     }
-
-    private void AddUserToChat(Guid chatId)
+    private void AddUserToNewChat(Guid userId)
     {
-        if (userInChatId != Guid.Empty && !usersInNewChat.Any(u => u.Id == userInChatId))
+        if (userId != Guid.Empty && !usersInNewChat.Any(u => u.Id == userId))
         {
-            var selectedUser = userList.FirstOrDefault(u => u.Id == userInChatId);
+            var selectedUser = userList.FirstOrDefault(u => u.Id == userId);
             if (selectedUser != null)
             {
                 usersInNewChat.Add(selectedUser);
@@ -61,17 +64,38 @@ partial class ChatList
         }
     }
 
-    private void AddUserToNewChat()
+    private void AddUserToChat(Guid chatId, Guid userId)
     {
-        if (userInChatId != Guid.Empty && !usersInNewChat.Any(u => u.Id == userInChatId))
+        var usersInChat = chatService.GetUsersInChat(chatId);
+
+        if (userId != Guid.Empty && !usersInChat.Any(u => u.Id == userId))
         {
-            var selectedUser = userList.FirstOrDefault(u => u.Id == userInChatId);
+            var selectedUser = userList.FirstOrDefault(u => u.Id == userId);
             if (selectedUser != null)
             {
-                usersInNewChat.Add(selectedUser);
+                chatService.AddUserToChat(chatId, selectedUser.Id);
+                userChats = chatService.GetUserChats(_currentUser.Id);
+                //userChats[userChats.IndexOf(userChats.Single(c => c.Id == chatId))] =  chatService.AddUserToChat(chatId, selectedUserId);
+            }
+        }
+
+    }
+
+    private void RemoveUserFromChat(Guid chatId, Guid userId)
+    {
+        var usersInChat = chatService.GetUsersInChat(chatId);
+
+        if (userId != Guid.Empty && usersInChat.Any(u => u.Id == userId))
+        {
+            var selectedUser = userList.FirstOrDefault(u => u.Id == userId);
+            if (selectedUser != null)
+            {
+                chatService.RemoveUserFromChat(chatId, selectedUser.Id);
+                userChats = chatService.GetUserChats(_currentUser.Id);
             }
         }
     }
+
 
     private void ToggleNewChatBox()
     {
@@ -96,6 +120,7 @@ partial class ChatList
     protected void NavigateToChat(Guid chatId)
     {        
         Navigation.NavigateTo($"/chat/{chatId}");
+        
     }
        
 }

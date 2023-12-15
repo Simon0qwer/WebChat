@@ -53,6 +53,50 @@ public class ChatDataService
         return context.Chats.AsNoTracking().ToList();
     }
 
+    //public void UpdateChat(Guid chatId, List<Guid> users)
+    //{
+    //    Chat chat = context.Chats.Find(chatId);
+    //    context.Chats.Update(chat);
+    //    context.Users.Update()
+    //}
+
+    public Chat? AddUserToChat(Guid chatId, Guid userId)
+    {
+        var chat = context.Chats.Include(c => c.Users).FirstOrDefault(c => c.Id == chatId);
+        var user = context.Users.Include(u => u.Chats).FirstOrDefault(u => u.Id == userId);
+
+        if (chat != null && user != null && !chat.Users.Any(u => u.Id == userId))
+        {
+            chat.Users.Add(user);   
+            context.Entry(chat).State = EntityState.Modified;
+            user.Chats.Add(chat);
+            context.Entry(user).State = EntityState.Modified;
+
+
+            context.SaveChanges();
+        }
+        return chat;
+    }
+
+    public Chat? RemoveUserFromChat(Guid chatId, Guid userId)
+    {
+        var chat = context.Chats.Include(c => c.Users).FirstOrDefault(c => c.Id == chatId);
+        var user = context.Users.Include(u => u.Chats).FirstOrDefault(u => u.Id == userId);
+
+        if (chat != null && user != null && chat.Users.Any(u => u.Id == userId))
+        {
+            chat.Users.Remove(user);
+            context.Entry(chat).State = EntityState.Modified;
+            user.Chats.Remove(chat);
+            context.Entry(user).State = EntityState.Modified;
+            
+            
+            context.SaveChanges();
+        }
+        return chat;
+    }
+
+
     public void CreateChat(Chat chat)
     {
         foreach(var user in chat.Users)

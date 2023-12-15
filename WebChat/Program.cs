@@ -23,6 +23,7 @@ builder.Services.AddScoped<UserDataService>();
 builder.Services.AddScoped<ChatDataService>();
 builder.Services.AddScoped<MessageDataService>();
 
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

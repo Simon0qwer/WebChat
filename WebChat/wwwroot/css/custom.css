@@ -21,26 +21,70 @@ body {
 
 /* Chat Styles */
 
-.chats-container {
-    max-width: 800px;
-    margin: auto;
-    padding: 20px;
-    background-color: #f8f9fa;
-    border-radius: 10px;
-    box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
-}
-
 .chat-card {
     border: 1px solid #dee2e6;
     border-radius: 10px;
     padding: 15px;
     margin: 15px 0;
     display: flex;
-    justify-content: space-between;
-    align-items: center;
+    flex-direction: column; /* Changed to column for better alignment */
+    justify-content: space-between; /* Adjusted to space-between */
+    align-items: stretch; /* Adjusted to stretch */
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     background-color: #fff;
 }
+
+.chat-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.chat-name {
+    flex-grow: 1; /* Take as much space as possible */
+    margin-right: 10px; /* Adjust margin as needed */
+}
+
+.chat-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.chat-settings {
+    display: none; /* Initial display set to none */
+    flex-direction: column; /* Adjusted to column */
+}
+
+.user-list {
+    margin-top: 10px;
+    display: flex;
+    flex-direction: column; /* Adjusted to column */
+}
+
+.settings-actions {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap; /* Adjusted to wrap */
+    margin-top: 10px;
+}
+
+.drop-down {
+    margin-right: 10px;
+}
+
+.settings-actions button {
+    margin-right: 10px;
+}
+
+.btn-action {
+    width: 150px; /* Set your desired width */
+    height: 45px; /* Set your desired height */
+    margin-right: 10px; /* Adjust margin as needed */
+    box-shadow: 0 -5px 10px rgba(0, 0, 0, 0.2);
+}
+
+/* Remaining Styles */
 
 .message-container {
     display: flex;
@@ -195,9 +239,5 @@ body {
 
 .message-input {
     flex-grow: 2; /* Adjusted flex-grow value */
-    margin-right: 10px;
-}
-
-.drop-down {
     margin-right: 10px;
 }
