@@ -14,16 +14,17 @@
     @if (showLogin)
     {
         <div class="registration-container">
-            <h2>Login @registrationName</h2>
+            <h2>Login</h2>
 
             <input class="form-control registration-input" @bind="registrationName" placeholder="Enter your name" />
+            <input class="form-control registration-input" @bind="registrationPassword" placeholder="Enter your password" />
 
             <button class="btn btn-primary login-btn" @onclick="() => { Login(); }">Login</button>
             <button class="btn btn-primary new-account-btn" @onclick="() => { showLogin = false; }">Return</button>
             
             @if (showError)
             {
-                <p class="error-message">This name doesn't exist. Please try again with a different name.</p>
+                <p class="error-message">There is no account with this name or password. Please try again with.</p>
             }
         </div>
     }
@@ -33,6 +34,7 @@
             <h2>Registration</h2>
 
             <input class="form-control registration-input" @bind="registrationName" placeholder="Enter your name" />
+            <input class="form-control registration-input" @bind="registrationPassword" placeholder="Enter your password" />
 
             <button class="btn btn-primary login-btn" @onclick="() => { Register(); }">Create</button>
             <button class="btn btn-primary new-account-btn" @onclick="() => { showRegistration = false; } ">Return</button>

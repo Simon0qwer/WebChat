@@ -113,9 +113,12 @@ partial class ChatList
     private void ToggleChatSettings(Guid chatId)
     {
         showChatSettings = !showChatSettings;
+        if (showNewChatBox)
+        {
+            showNewChatBox = !showNewChatBox;
+        }
         selectedChatIdForSettings = chatId;
     }
-
 
     protected void NavigateToChat(Guid chatId)
     {        

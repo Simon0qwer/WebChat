@@ -11,29 +11,33 @@ partial class Registration
     private bool showLogin = false;
     private bool showError;
     private string registrationName = "";
+    private string registrationPassword = "";
 
     private void Login()
     {
         showError = false;
-        if (!string.IsNullOrWhiteSpace(registrationName))
+
+        if (!string.IsNullOrWhiteSpace(registrationName) && !string.IsNullOrWhiteSpace(registrationPassword))
         {
-            if (!userService.GetUsers().Any(user => user.Name == registrationName))
+            var userWithSameName = userService.GetUsers().FirstOrDefault(user => user.Name == registrationName);
+
+            if (userWithSameName != null && userWithSameName.Password == registrationPassword)
+            {
+                userService.SetCurrentUser(userWithSameName);
+                Navigation.NavigateTo("/chats", false);
+            }
+            else
             {
                 registrationName = "";
                 showError = true;
-                return;
             }
-
-            var existingUser = userService.GetUsers().First(user => user.Name == registrationName);
-            userService.SetCurrentUser(existingUser);
-            Navigation.NavigateTo("/chats", false);
         }
     }
 
     private void Register()
     {
         showError = false;
-        if (!string.IsNullOrWhiteSpace(registrationName))
+        if (!string.IsNullOrWhiteSpace(registrationName) && !string.IsNullOrWhiteSpace(registrationPassword))
         {
             if (userService.GetUsers().Any(user => user.Name == registrationName))
             {
@@ -42,7 +46,7 @@ partial class Registration
                 return;
             }
 
-            var newUser = new User { Name = registrationName, Id = Guid.NewGuid() };
+            var newUser = new User { Name = registrationName, Id = Guid.NewGuid(), Password = registrationPassword};
             var savedUser = userService.SaveUser(newUser);
             if(savedUser != null)
             {

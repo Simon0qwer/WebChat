@@ -32,10 +32,7 @@ public class UserDataService
         context.Users.Add(user);
         context.SaveChanges();
         return context.Users.SingleOrDefault(u => u.Id == user.Id);
+   
     }
 
-    public void ContextReload()
-    {
-        context = new WebChatDbContext();
-    }
 }
